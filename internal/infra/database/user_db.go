@@ -13,14 +13,14 @@ func NewUserDB(db *gorm.DB) *UserDB {
 	return &UserDB{DB: db}
 }
 
-func (ur *UserDB) Create(user *entity.User) error {
-	return ur.DB.Create(user).Error
+func (u *UserDB) Create(user *entity.User) error {
+	return u.DB.Create(user).Error
 }
 
-func (ur *UserDB) FindByEmail(email string) (*entity.User, error) {
+func (u *UserDB) FindByEmail(email string) (*entity.User, error) {
 	var user entity.User
 
-	err := ur.DB.
+	err := u.DB.
 		Where("email = ?", email).
 		First(&user).
 		Error

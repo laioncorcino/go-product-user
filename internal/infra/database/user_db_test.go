@@ -5,21 +5,45 @@ import (
 	"github.com/stretchr/testify/assert"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"log"
+	"os"
 	"testing"
 )
 
-func TestUserDB_Create(t *testing.T) {
-	db, err := gorm.Open(sqlite.Open("file::memory:"))
+var db *gorm.DB
+var userDB *UserDB
+
+func TestMain(m *testing.M) {
+	setup()
+	defer dropDB()
+	code := m.Run()
+	clearDatabase()
+	os.Exit(code)
+}
+
+func setup() {
+	var err error
+	db, err = gorm.Open(sqlite.Open("file::memory:"))
 	if err != nil {
-		t.Error(err)
+		log.Fatal(err)
 	}
 
 	_ = db.AutoMigrate(&entity.User{})
+	userDB = NewUserDB(db)
+}
 
+func dropDB() {
+	s, _ := db.DB()
+	s.Close()
+}
+
+func clearDatabase() {
+	db.Delete(&entity.User{})
+}
+
+func TestUserDB_Create(t *testing.T) {
 	user, _ := entity.NewUser("Jonh", "jonh@email.com", "12345")
-	userDB := NewUserDB(db)
-
-	err = userDB.Create(user)
+	err := userDB.Create(user)
 
 	assert.Nil(t, err)
 
@@ -34,19 +58,8 @@ func TestUserDB_Create(t *testing.T) {
 }
 
 func TestUserDB_FindByEmail(t *testing.T) {
-	db, err := gorm.Open(sqlite.Open("file::memory:"))
-	if err != nil {
-		t.Error(err)
-	}
-
-	_ = db.AutoMigrate(&entity.User{})
-
 	user, _ := entity.NewUser("Jonh", "jonh@email.com", "12345")
-	userDB := NewUserDB(db)
-
-	err = userDB.Create(user)
-
-	assert.Nil(t, err)
+	db.Create(user)
 
 	userSaved, err := userDB.FindByEmail(user.Email)
 
