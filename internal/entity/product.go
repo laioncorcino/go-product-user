@@ -15,11 +15,11 @@ var (
 type Product struct {
 	ProductID string    `json:"product_id,omitempty"`
 	Name      string    `json:"name,omitempty"`
-	Price     int       `json:"price,omitempty"`
+	Price     float64   `json:"price,omitempty"`
 	CreatedAt time.Time `json:"created_at,omitempty"`
 }
 
-func NewProduct(name string, price int) (*Product, error) {
+func NewProduct(name string, price float64) (*Product, error) {
 	p := &Product{
 		ProductID: pkg.NewID(),
 		Name:      name,

@@ -7,13 +7,13 @@ import (
 )
 
 func TestNewProduct(t *testing.T) {
-	p, err := NewProduct("Product 1", 10)
+	p, err := NewProduct("Product 1", 10.0)
 	assert.Nil(t, err)
 	assert.NotNil(t, p)
 	assert.NotEmpty(t, p.ProductID)
 	assert.True(t, pkg.IsUUID(p.ProductID))
 	assert.Equal(t, p.Name, "Product 1")
-	assert.Equal(t, p.Price, 10)
+	assert.Equal(t, p.Price, 10.0)
 }
 
 func TestProduct_ValidateNameIsRequired(t *testing.T) {
