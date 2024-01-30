@@ -9,8 +9,10 @@ type ProductDB struct {
 	DB *gorm.DB
 }
 
-func NewProductDB(db *gorm.DB) *ProductDB {
-	return &ProductDB{DB: db}
+func NewProductDB(db *gorm.DB) ProductQuery {
+	return &ProductDB{
+		DB: db,
+	}
 }
 
 func (p *ProductDB) Create(product *entity.Product) error {
@@ -44,9 +46,9 @@ func (p *ProductDB) FindAll(page, limit int, sort string) ([]entity.Product, err
 }
 
 func (p *ProductDB) FindByID(productId string) (*entity.Product, error) {
-	var product entity.Product
+	var product *entity.Product
 	err := p.DB.First(&product, "product_id = ?", productId).Error
-	return &product, err
+	return product, err
 }
 
 func (p *ProductDB) Update(product *entity.Product) error {

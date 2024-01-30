@@ -9,8 +9,10 @@ type UserDB struct {
 	DB *gorm.DB
 }
 
-func NewUserDB(db *gorm.DB) *UserDB {
-	return &UserDB{DB: db}
+func NewUserDB(db *gorm.DB) UserQuery {
+	return &UserDB{
+		DB: db,
+	}
 }
 
 func (u *UserDB) Create(user *entity.User) error {
@@ -18,7 +20,7 @@ func (u *UserDB) Create(user *entity.User) error {
 }
 
 func (u *UserDB) FindByEmail(email string) (*entity.User, error) {
-	var user entity.User
+	var user *entity.User
 
 	err := u.DB.
 		Where("email = ?", email).
@@ -29,5 +31,5 @@ func (u *UserDB) FindByEmail(email string) (*entity.User, error) {
 		return nil, err
 	}
 
-	return &user, nil
+	return user, nil
 }
