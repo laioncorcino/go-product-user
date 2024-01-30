@@ -7,10 +7,10 @@ import (
 )
 
 type User struct {
-	UserID   string `json:"user_id,omitempty"`
-	Name     string `json:"name,omitempty"`
-	Email    string `json:"email,omitempty"`
-	Password string `json:"-"`
+	UserID   string
+	Name     string
+	Email    string
+	Password string
 }
 
 func NewUser(name, email, password string) (*User, error) {

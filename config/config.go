@@ -14,12 +14,11 @@ type conf struct {
 	DBName        string `mapstructure:"DB_NAME"`
 	WebServerPort string `mapstructure:"SERVER_PORT"`
 	JWTSecret     string `mapstructure:"JWT_SECRET"`
-	JWTExpiresIn  string `mapstructure:"JWT_EXPIRES_IN"`
+	JWTExpiresIn  int    `mapstructure:"JWT_EXPIRES_IN"`
 	TokenAuth     *jwtauth.JWTAuth
 }
 
 func LoadConfig(path string) (*conf, error) {
-	var cfg *conf
 	viper.SetConfigName("app_config")
 	viper.SetConfigType("env")
 	viper.AddConfigPath(path)
@@ -30,10 +29,12 @@ func LoadConfig(path string) (*conf, error) {
 		panic(err)
 	}
 
+	var cfg *conf
 	if err := viper.Unmarshal(&cfg); err != nil {
 		panic(err)
 	}
 
 	cfg.TokenAuth = jwtauth.New("HS256", []byte(cfg.JWTSecret), nil)
+
 	return cfg, nil
 }
