@@ -1,10 +1,13 @@
 package entity
 
 import (
+	"errors"
 	"github.com/laioncorcino/go-product-user/pkg"
 	"golang.org/x/crypto/bcrypt"
 	_ "golang.org/x/crypto/bcrypt"
 )
+
+var ErrEmailIsRequired = errors.New("email is required")
 
 type User struct {
 	UserID   string
@@ -19,15 +22,35 @@ func NewUser(name, email, password string) (*User, error) {
 		return nil, err
 	}
 
-	return &User{
+	user := &User{
 		UserID:   pkg.NewID(),
 		Name:     name,
 		Email:    email,
 		Password: string(hash),
-	}, nil
+	}
+
+	err = user.Validate()
+
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
 }
 
-func (u User) ValidatePass(pass string) bool {
+func (u *User) Validate() error {
+	if u.Name == "" {
+		return ErrNameIsRequired
+	}
+
+	if u.Email == "" {
+		return ErrEmailIsRequired
+	}
+
+	return nil
+}
+
+func (u *User) ValidatePass(pass string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(pass))
 	return err == nil
 }
