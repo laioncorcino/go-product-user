@@ -5,15 +5,17 @@ import (
 	"github.com/laioncorcino/go-product-user/pkg"
 	"golang.org/x/crypto/bcrypt"
 	_ "golang.org/x/crypto/bcrypt"
+	"time"
 )
 
 var ErrEmailIsRequired = errors.New("email is required")
 
 type User struct {
-	UserID   string
-	Name     string
-	Email    string
-	Password string
+	UserID    string
+	Name      string
+	Email     string
+	Password  string
+	CreatedAt time.Time
 }
 
 func NewUser(name, email, password string) (*User, error) {

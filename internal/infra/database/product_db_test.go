@@ -55,22 +55,29 @@ func TestProductDB_FindAll(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.Len(t, products, 10)
-	assert.Equal(t, "Product 1", products[0].Name)
-	assert.Equal(t, "Product 10", products[9].Name)
+	assert.Equal(t, products[0].Name, "Product 1")
+	assert.Equal(t, products[9].Name, "Product 10")
 
 	products, err = productDB.FindAll(1, 10, "desc")
 
 	assert.Nil(t, err)
 	assert.Len(t, products, 10)
-	assert.Equal(t, "Product 34", products[0].Name)
-	assert.Equal(t, "Product 25", products[9].Name)
+	assert.Equal(t, products[0].Name, "Product 34")
+	assert.Equal(t, products[9].Name, "Product 25")
 
 	products, err = productDB.FindAll(2, 20, "")
 
 	assert.Nil(t, err)
 	assert.Len(t, products, 14)
-	assert.Equal(t, "Product 21", products[0].Name)
-	assert.Equal(t, "Product 34", products[13].Name)
+	assert.Equal(t, products[0].Name, "Product 21")
+	assert.Equal(t, products[13].Name, "Product 34")
+
+	products, err = productDB.FindAll(0, 0, "")
+
+	assert.Nil(t, err)
+	assert.Len(t, products, 10)
+	assert.Equal(t, products[0].Name, "Product 1")
+	assert.Equal(t, products[9].Name, "Product 10")
 }
 
 func TestProductDB_FindByID(t *testing.T) {

@@ -27,20 +27,17 @@ func (p *ProductDB) FindAll(page, limit int, sort string) ([]entity.Product, err
 		sort = "asc"
 	}
 
-	if page != 0 && limit != 0 {
-		err = p.DB.
-			Limit(limit).
-			Offset((page - 1) * limit).
-			Order("created_at " + sort).
-			Find(&products).
-			Error
-
-	} else {
-		err = p.DB.
-			Order("created_at " + sort).
-			Find(&products).
-			Error
+	if page == 0 && limit == 0 {
+		page = 1
+		limit = 10
 	}
+
+	err = p.DB.
+		Limit(limit).
+		Offset((page - 1) * limit).
+		Order("created_at " + sort).
+		Find(&products).
+		Error
 
 	return products, err
 }
