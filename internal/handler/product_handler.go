@@ -64,9 +64,22 @@ func (h *ProductHandle) GetProducts(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var productResponses []dto.ProductResponse
+
+	for _, p := range products {
+		productResponse := dto.ProductResponse{
+			ProductID: p.ProductID,
+			Name:      p.Name,
+			Price:     p.Price,
+			CreatedAt: p.CreatedAt.String(),
+		}
+
+		productResponses = append(productResponses, productResponse)
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	_ = json.NewEncoder(w).Encode(products)
+	_ = json.NewEncoder(w).Encode(productResponses)
 }
 
 func (h *ProductHandle) GetProductByID(w http.ResponseWriter, r *http.Request) {
@@ -82,9 +95,16 @@ func (h *ProductHandle) GetProductByID(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	productResponse := dto.ProductResponse{
+		ProductID: product.ProductID,
+		Name:      product.Name,
+		Price:     product.Price,
+		CreatedAt: product.CreatedAt.String(),
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	_ = json.NewEncoder(w).Encode(product)
+	_ = json.NewEncoder(w).Encode(productResponse)
 }
 
 func (h *ProductHandle) UpdateProduct(w http.ResponseWriter, r *http.Request) {
