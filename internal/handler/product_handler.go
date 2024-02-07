@@ -11,17 +11,17 @@ import (
 	"strconv"
 )
 
-type ProductHandle struct {
+type ProductHandler struct {
 	ProductDB database.ProductQuery
 }
 
-func NewProductHandle(db database.ProductQuery) *ProductHandle {
-	return &ProductHandle{
+func NewProductHandler(db database.ProductQuery) *ProductHandler {
+	return &ProductHandler{
 		ProductDB: db,
 	}
 }
 
-func (h *ProductHandle) CreateProduct(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	var request dto.ProductRequest
 
 	err := json.NewDecoder(r.Body).Decode(&request)
@@ -45,7 +45,7 @@ func (h *ProductHandle) CreateProduct(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 }
 
-func (h *ProductHandle) GetProducts(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) GetProducts(w http.ResponseWriter, r *http.Request) {
 	sort := r.URL.Query().Get("sort")
 
 	page, err := strconv.Atoi(r.URL.Query().Get("page"))
@@ -82,7 +82,7 @@ func (h *ProductHandle) GetProducts(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(productResponses)
 }
 
-func (h *ProductHandle) GetProductByID(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) GetProductByID(w http.ResponseWriter, r *http.Request) {
 	ID := chi.URLParam(r, "productId")
 	if ID == "" {
 		w.WriteHeader(http.StatusBadRequest)
@@ -107,7 +107,7 @@ func (h *ProductHandle) GetProductByID(w http.ResponseWriter, r *http.Request) {
 	_ = json.NewEncoder(w).Encode(productResponse)
 }
 
-func (h *ProductHandle) UpdateProduct(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 	ID := chi.URLParam(r, "productId")
 	if ID == "" {
 		w.WriteHeader(http.StatusBadRequest)
@@ -141,7 +141,7 @@ func (h *ProductHandle) UpdateProduct(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func (h *ProductHandle) DeleteProduct(w http.ResponseWriter, r *http.Request) {
+func (h *ProductHandler) DeleteProduct(w http.ResponseWriter, r *http.Request) {
 	ID := chi.URLParam(r, "productId")
 	if ID == "" {
 		w.WriteHeader(http.StatusBadRequest)
