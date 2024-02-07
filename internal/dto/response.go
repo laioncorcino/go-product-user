@@ -6,6 +6,10 @@ type UserResponse struct {
 	Email  string `json:"email,omitempty"`
 }
 
+type TokenResponse struct {
+	AccessToken string `json:"access_token"`
+}
+
 type ProductResponse struct {
 	ProductID string  `json:"product_id"`
 	Name      string  `json:"name"`

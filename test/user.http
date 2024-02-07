@@ -1,0 +1,20 @@
+POST http://localhost:8001/users HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Laion Corcino",
+  "email": "laioncorcino@gmail.com",
+  "password": "123456"
+}
+
+###
+
+POST http://localhost:8001/users/token HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "laioncorcino@gmail.com",
+  "password": "123456"
+}
+
+###
